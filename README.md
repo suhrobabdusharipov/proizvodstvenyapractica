@@ -57,14 +57,14 @@
 
 #### 1. Клонировать репозиторий
 
-git clone https://github.com/suhrobabdusharipov/proizvodstvenyapractica.git
+git clone https://github.com/suhrobabdusharipov/proizvodstvenyapractica.git  
 cd proizvodstvenyapractica/backend  
 
 #### 2. Создать виртуальное окружение
 
-python -m venv venv
-source venv/bin/activate      # Linux/Mac
-venv\Scripts\activate         # Windows
+python -m venv venv  
+source venv/bin/activate      # Linux/Mac  
+venv\Scripts\activate         # Windows  
 
 #### 3. Установить зависимости
 
@@ -74,14 +74,14 @@ pip install -r requirements.txt
 
 Создайте файл .env в папке backend/:
 
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=pc_repair_db
-DB_USER=ваш_юзер
-DB_PASSWORD=ваш_пароль
+DB_HOST=localhost  
+DB_PORT=5432  
+DB_NAME=pc_repair_db  
+DB_USER=ваш_юзер  
+DB_PASSWORD=ваш_пароль  
 
-JWT_SECRET_KEY=секретный_ключ_минимум_32_символа
-SECRET_KEY=flask_secret_key
+JWT_SECRET_KEY=секретный_ключ_минимум_32_символа  
+SECRET_KEY=flask_secret_key  
 
 #### 5. Создать базу данных в PostgreSQL
 
@@ -110,12 +110,12 @@ curl http://localhost:5000/health
 
 #### 1. Убедитесь, что Docker установлен
 
-docker --version
+docker --version  
 docker-compose --version
 
 #### 2. Клонировать репозиторий
 
-git clone https://github.com/suhrobabdusharipov/proizvodstvenyapractica.git
+git clone https://github.com/suhrobabdusharipov/proizvodstvenyapractica.git  
 cd proizvodstvenyapractica
 
 #### 3. Запустить все сервисы одной командой
@@ -150,7 +150,7 @@ docker compose down
 
 ### Запуск тестов
 
-pip install pytest pytest-flask
+pip install pytest pytest-flask  
 pytest tests/
 
 ## 🌐 Деплой
@@ -168,7 +168,7 @@ pytest tests/
 
 ## 📬 Контакты
 
-По вопросам: suhrobarakcaa@gmail.com
+По вопросам: suhrobarakcaa@gmail.com  
 GitHub репозиторий: https://github.com/suhrobabdusharipov/proizvodstvenyapractica.git
 
-© 2026 — Система учёта заявок на ремонт ПК и ноутбуков
+© 2026 - Система учёта заявок на ремонт ПК и ноутбуков
