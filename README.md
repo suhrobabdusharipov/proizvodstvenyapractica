@@ -57,7 +57,6 @@
 
 #### 1. Клонировать репозиторий
 
-```bash
 git clone https://github.com/suhrobabdusharipov/proizvodstvenyapractica.git
 cd proizvodstvenyapractica/backend  
 
