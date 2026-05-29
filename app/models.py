@@ -209,3 +209,59 @@ class RequestComment(db.Model):
     
     def __repr__(self):
         return f'<RequestComment {self.id} for request {self.request_id}>'
+
+class SparePart(db.Model):
+    __tablename__ = 'spare_parts'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    quantity = db.Column(db.Integer, default=0)
+    reserved_quantity = db.Column(db.Integer, default=0)  
+    price = db.Column(db.Numeric(10, 2), nullable=False)
+    compatible_models = db.Column(db.Text, nullable=True)  
+    is_active = db.Column(db.Boolean, default=True)
+    
+    used_in_requests = db.relationship('RequestSparePart', backref='spare_part', lazy='dynamic')
+    
+    @property
+    def available_quantity(self):
+        return self.quantity - self.reserved_quantity
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'quantity': self.quantity,
+            'reserved_quantity': self.reserved_quantity,
+            'available_quantity': self.available_quantity,
+            'price': float(self.price) if self.price else 0,
+            'compatible_models': self.compatible_models,
+            'is_active': self.is_active
+        }
+    
+    def __repr__(self):
+        return f'<SparePart {self.name}>'
+
+class RequestSparePart(db.Model):
+    __tablename__ = 'request_spare_parts'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    request_id = db.Column(db.Integer, db.ForeignKey('repair_requests.id'), nullable=False)
+    part_id = db.Column(db.Integer, db.ForeignKey('spare_parts.id'), nullable=False)
+    quantity_used = db.Column(db.Integer, default=1)
+    price_at_moment = db.Column(db.Numeric(10, 2), nullable=True)  
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'request_id': self.request_id,
+            'part_id': self.part_id,
+            'part_name': self.spare_part.name if self.spare_part else None,
+            'quantity_used': self.quantity_used,
+            'price_at_moment': float(self.price_at_moment) if self.price_at_moment else None
+        }
+    
+    def __repr__(self):
+        return f'<RequestSparePart request={self.request_id} part={self.part_id}>'
