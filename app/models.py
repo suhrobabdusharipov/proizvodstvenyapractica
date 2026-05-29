@@ -76,3 +76,29 @@ class User(db.Model):
     
     def __repr__(self):
         return f'<User {self.email}>'
+
+class RepairCategory(db.Model):
+    __tablename__ = 'repair_categories'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    description = db.Column(db.Text, nullable=True)
+    price = db.Column(db.Numeric(10, 2), nullable=False, default=0)
+    estimated_days = db.Column(db.Integer, default=1)
+    is_active = db.Column(db.Boolean, default=True)
+    sort_order = db.Column(db.Integer, default=0)
+    
+    requests = db.relationship('RepairRequest', backref='category', lazy='dynamic')
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'price': float(self.price) if self.price else 0,
+            'estimated_days': self.estimated_days,
+            'is_active': self.is_active
+        }
+    
+    def __repr__(self):
+        return f'<RepairCategory {self.name}>'
