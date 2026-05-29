@@ -102,3 +102,78 @@ class RepairCategory(db.Model):
     
     def __repr__(self):
         return f'<RepairCategory {self.name}>'
+    
+class RepairRequest(db.Model):
+    __tablename__ = 'repair_requests'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    client_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    master_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('repair_categories.id'), nullable=False)
+    
+    device_type = db.Column(db.String(20), nullable=False)
+    device_model = db.Column(db.String(100), nullable=True)
+    issue_description = db.Column(db.Text, nullable=False)
+    
+    status = db.Column(db.String(20), default=RequestStatus.NEW, nullable=False, index=True)
+    total_price = db.Column(db.Numeric(10, 2), default=0)
+    
+    created_at = db.Column(db.DateTime, default=datetime.now, index=True)
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+    completed_at = db.Column(db.DateTime, nullable=True)
+    
+    comments = db.relationship(
+        'RequestComment',
+        backref='request',
+        lazy='dynamic',
+        cascade='all, delete-orphan'
+    )
+    used_parts = db.relationship(
+        'RequestSparePart',
+        backref='request',
+        lazy='dynamic',
+        cascade='all, delete-orphan'
+    )
+    
+    def can_edit(self, user):
+        if not user:
+            return False
+        if user.role == UserRole.ADMIN:
+            return True
+        if user.role == UserRole.MASTER:
+            return True
+        if user.id == self.client_id and self.status == RequestStatus.NEW:
+            return True
+        return False
+    
+    def can_change_status(self, user):
+        if not user:
+            return False
+        return user.role in [UserRole.ADMIN, UserRole.MASTER]
+    
+    def to_dict(self, include_comments=False, include_parts=False):
+        data = {
+            'id': self.id,
+            'client': self.client.to_dict() if self.client else None,
+            'master': self.assigned_master.to_dict() if self.assigned_master else None,
+            'category': self.category.to_dict() if self.category else None,
+            'device_type': self.device_type,
+            'device_model': self.device_model,
+            'issue_description': self.issue_description,
+            'status': self.status,
+            'total_price': float(self.total_price) if self.total_price else 0,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+            'completed_at': self.completed_at.isoformat() if self.completed_at else None
+        }
+        
+        if include_comments:
+            data['comments'] = [c.to_dict() for c in self.comments.order_by(RequestComment.created_at.asc())]
+        
+        if include_parts:
+            data['used_parts'] = [p.to_dict() for p in self.used_parts]
+        
+        return data
+    
+    def __repr__(self):
+        return f'<RepairRequest {self.id}: {self.status}>'
