@@ -177,3 +177,35 @@ class RepairRequest(db.Model):
     
     def __repr__(self):
         return f'<RepairRequest {self.id}: {self.status}>'
+    
+class RequestComment(db.Model):
+    __tablename__ = 'request_comments'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    request_id = db.Column(db.Integer, db.ForeignKey('repair_requests.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    
+    comment_text = db.Column(db.Text, nullable=False)
+    is_internal = db.Column(db.Boolean, default=False) 
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    
+    def can_view(self, user):
+        if not user:
+            return not self.is_internal
+        if user.role in [UserRole.ADMIN, UserRole.MASTER]:
+            return True
+        return not self.is_internal
+    
+    def to_dict(self, user=None):
+        return {
+            'id': self.id,
+            'request_id': self.request_id,
+            'user_name': self.author.full_name if self.author else None,
+            'user_role': self.author.role if self.author else None,
+            'comment_text': self.comment_text,
+            'is_internal': self.is_internal,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+    
+    def __repr__(self):
+        return f'<RequestComment {self.id} for request {self.request_id}>'
