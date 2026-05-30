@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Главная - Ремонт компьютеров в Красноярске{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <div class="hero-logo">
+            РЕМОНТ24
+        </div>
+        
+        <h1 class="hero-title">
+            <span class = "white-text">РЕМОНТ</span> КОМПЬЮТЕРОВ,<br>
+            НОУТБУКОВ И МОНОБЛОКОВ
+        </h1>
+        
+        <p class="hero-subtitle">
+            НА ДОМУ <span class = "white-text">В КРАСНОЯСРКЕ</span>
+        </p>
+        
+        <div class="hero-consult underline-blue">
+            БЕСПЛАТНАЯ КОНСУЛЬТАЦИЯ
+        </div>
+        
+        <div class="hero-features">
+            <div class="feature">
+                <span>Лучшие мастера<br>в городе</span>
+            </div>
+            <div class="feature">
+                <span>Работа без выходных<br>с 8 до 22</span>
+            </div>
+            <div class="feature">
+                <span>Бесплатный выезд<br>и диагностика</span>
+            </div>
+            <div class="feature">
+                <span>Гарантия на все работы<br>до 2-х лет</span>
+            </div>
+        </div>
+        
+        <button class="hero-btn" onclick="alert('Форма обратной связи появится позже')">
+            Оставить заявку
+        </button>
+    </div>
+</section>
+{% endblock %}

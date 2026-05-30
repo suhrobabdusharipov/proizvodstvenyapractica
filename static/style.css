@@ -1,0 +1,191 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', 'Helvetica', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.hero {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('https://tehnofan.com/wp-content/uploads/2023/01/nintchdbpict000515083462.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+    max-width: 1200px;
+    width: 90%;
+    margin: 0 auto;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.hero-logo {
+    position: fixed;
+    top: 25px;
+    left: 30px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffffff;
+    padding: 8px 20px;
+    border-radius: 40px;
+    z-index: 100;
+}
+
+.hero-title {
+    font-size: 4rem;
+    font-weight: bold;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    line-height: 1.2;
+    color: #1a56db;
+}
+.hero-title span {
+    color: white;}
+
+.hero-subtitle {
+    font-size: 3rem;
+    margin-bottom: 50px;
+    color: #1a56db;
+    font-weight: 600;
+}
+.hero-subtitle span {
+    color: white;}
+
+.hero-consult {
+    display: inline-block;
+    padding: 5px 30px;
+    font-size: 1.7rem;
+    font-weight: bold;
+    margin-bottom: 60px;
+    color: #ffffff;
+}
+.underline-blue {
+    border-bottom: 5px solid #1a56db;
+    display: inline-block;
+    padding-bottom: 1px;
+}
+
+.hero-features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.feature {
+    text-align: center;
+    min-width: 200px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 18px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.feature span {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    color: #1a56db;
+}
+
+.hero-btn {
+    background: transparent;
+    border: 2px solid #1a56db;
+    padding: 16px 48px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #1a56db;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.hero-btn:hover {
+    background: #1a56db;
+    color: #ffffff;
+    border-color: #1a56db;
+}
+
+@media (max-width: 480px) {
+    .hero {
+        background-attachment: scroll;
+    }
+    
+    .hero-logo {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        font-size: 1rem;
+        padding: 5px 12px;
+    }
+    
+    .hero-content {
+        padding: 80px 15px 40px;
+    }
+    
+    .hero-title {
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 25px;
+    }
+    
+    .hero-consult {
+        font-size: 0.85rem;
+        padding: 10px 20px;
+        margin-bottom: 30px;
+    }
+    
+    .hero-features {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 30px;
+    }
+    
+    .feature {
+        min-width: auto;
+        width: 100%;
+        padding: 12px;
+    }
+    
+    .feature span {
+        font-size: 0.85rem;
+    }
+    
+    .hero-btn {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+}
