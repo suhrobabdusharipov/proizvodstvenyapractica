@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
@@ -49,9 +49,18 @@ def create_database_if_not_exists():
         print(f" Ошибка при проверке/создании БД: {e}")
         print("   Убедитесь, что PostgreSQL запущен и параметры подключения верны")
 
+@app.route('/')
+def index_page():
+    return render_template('index.html')
+
+@app.route('/health')
+def health():
+    from flask import jsonify
+    return jsonify({'status': 'ok', 'service': 'Ремонт24'}), 200
+
 with app.app_context():
     print("\n" + "=" * 50)
-    print("🛠 Ремонт24 - Создание базы данных")
+    print(" Ремонт24 - Создание базы данных")
     print("=" * 50)
     
     create_database_if_not_exists()
