@@ -16,7 +16,7 @@
         </h1>
         
         <p class="hero-subtitle">
-            НА ДОМУ <span class = "white-text">В КРАСНОЯСРКЕ</span>
+            НА ДОМУ <span class = "white-text">В КРАСНОЯРСКЕ</span>
         </p>
         
         <div class="hero-consult underline-blue">
@@ -37,10 +37,176 @@
                 <span>Гарантия на все работы<br>до 2-х лет</span>
             </div>
         </div>
+        <a href="#auth-section" class="hero-btn">Оставить заявку</a>
+    </div>
+</section>
+
+<section class="services">
+    <div class="container">
+        <h2 class="section-title">ПРЕИМУЩЕСТВА</h2>
         
-        <button class="hero-btn" onclick="alert('Форма обратной связи появится позже')">
-            Оставить заявку
-        </button>
+        <div class="advantages-grid">
+            <div class="advantage-card">
+                <div class="advantage-text">Выезд в течение 5 минут с гарантией на все работы</div>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-text">Бесплатный выезд в любую точку города + Выезд в область до 50 км!</div>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-text">Решение проблемы день в день</div>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-text">Квалифицированная помощь при Вас за 30 минут</div>
+            </div>
+        </div>
+        
+        <h2 class="section-title">УСЛУГИ</h2>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-name">Выезд мастера и диагностика</div>
+                <div class="service-price">От 0 руб.</div>
+            </div>
+            <div class="service-card">
+                <div class="service-name">Установка ПО (Windows, программы, драйвера и др.)</div>
+                <div class="service-price">От 290 руб.</div>
+            </div>
+            <div class="service-card">
+                <div class="service-name">Профессиональная сборка ПК любой сложности на дому</div>
+                <div class="service-price">От 600 руб.</div>
+            </div>
+            <div class="service-card">
+                <div class="service-name">Аппаратный ремонт ПК, ноутбуков, моноблоков</div>
+                <div class="service-price">от 600 руб. + запчасть</div>
+            </div>
+            <div class="service-card">
+                <div class="service-name">Установка антивируса, удаление вирусов</div>
+                <div class="service-price">от 450 руб.</div>
+            </div>
+            <div class="service-card">
+                <div class="service-name">Чистка компьютеров, замена термопасты</div>
+                <div class="service-price">От 490 руб.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="stages">
+    <div class="container">
+        <h2 class="section-title">ЭТАПЫ РЕМОНТА</h2>
+        
+        <div class="stages-grid">
+            <div class="stage-card">
+                <div class="stage-number">1</div>
+                <div class="stage-name">ЗВОНОК</div>
+                <div class="stage-text">Вы назначаете встречу в удобном для Вас месте</div>
+            </div>
+            <div class="stage-card">
+                <div class="stage-number">2</div>
+                <div class="stage-name">ВСТРЕЧА</div>
+                <div class="stage-text">Выездной мастер приедет в удобное для Вас время</div>
+            </div>
+            <div class="stage-card">
+                <div class="stage-number">3</div>
+                <div class="stage-name">РЕМОНТ</div>
+                <div class="stage-text">Мастер производит необходимый ремонт на месте</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="auth-section" id="auth-section">
+    <div class="container">
+        <h2 class="section-title">ВХОД / РЕГИСТРАЦИЯ</h2>
+        
+        <div class="auth-tabs">
+            <div class="auth-tab">
+                <input type="radio" name="auth-tab" id="tab-login" checked>
+                <label for="tab-login" class="tab-label">Вход</label>
+                <div class="auth-form">
+                    <form action="/login" method="POST">
+                        <div class="form-group">
+                            <label for="login-email">Email:</label>
+                            <input type="email" id="login-email" name="email" placeholder="example@mail.ru" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Пароль:</label>
+                            <input type="password" id="login-password" name="password" placeholder="••••••" required>
+                        </div>
+                        <button type="submit" class="form-btn">Войти</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="auth-tab">
+                <input type="radio" name="auth-tab" id="tab-register">
+                <label for="tab-register" class="tab-label">Регистрация</label>
+                <div class="auth-form">
+                    <form action="/register" method="POST">
+                        <div class="form-group">
+                            <label for="register-name">ФИО:</label>
+                            <input type="text" id="register-name" name="full_name" placeholder="Иванов Иван Иванович" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">Email:</label>
+                            <input type="email" id="register-email" name="email" placeholder="example@mail.ru" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-phone">Телефон:</label>
+                            <input type="tel" id="register-phone" name="phone" placeholder="+7 (999) 123-45-67">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Пароль:</label>
+                            <input type="password" id="register-password" name="password" placeholder="••••••" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-confirm">Подтверждение пароля:</label>
+                            <input type="password" id="register-confirm" name="confirm" placeholder="••••••" required>
+                        </div>
+                        <button type="submit" class="form-btn">Зарегистрироваться</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="contacts">
+    <div class="container">
+        <h2 class="section-title">КОНТАКТЫ</h2>
+        
+        <div class="contacts-grid">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-label">Адрес:</div>
+                    <div class="contact-value">г. Красноярск, ул. Матросова 20</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-label">Режим работы:</div>
+                    <div class="contact-value">Ежедневно с 08:00 до 21:00</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-label">Телефон:</div>
+                    <div class="contact-value">8 (123) 456-78-90</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-label">Админ:</div>
+                    <div class="contact-value">Сухроб</div>
+                </div>
+            </div>
+            
+            <div class="contact-map">
+                <div class="map-placeholder">
+                    <iframe 
+                        src="https://yandex.ru/map-widget/v1/?um=constructor%3A306012f277104a504225c447a166c5c4685d5661919677be17d9c9b4e2b6c1f6&amp;source=constructor"
+                        width="100%" 
+                        height="250" 
+                        frameborder="0"
+                        style="border-radius: 12px;">
+                    </iframe>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 {% endblock %}

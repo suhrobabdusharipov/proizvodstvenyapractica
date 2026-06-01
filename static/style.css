@@ -53,6 +53,7 @@ body {
     padding: 8px 20px;
     border-radius: 40px;
     z-index: 100;
+    background: rgba(0, 0, 0, 0.3);
 }
 
 .hero-title {
@@ -64,7 +65,8 @@ body {
     color: #1a56db;
 }
 .hero-title span {
-    color: white;}
+    color: white;
+}
 
 .hero-subtitle {
     font-size: 3rem;
@@ -73,7 +75,8 @@ body {
     font-weight: 600;
 }
 .hero-subtitle span {
-    color: white;}
+    color:white;
+}
 
 .hero-consult {
     display: inline-block;
@@ -115,7 +118,8 @@ body {
 }
 
 .hero-btn {
-    background: transparent;
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.9);
     border: 2px solid #1a56db;
     padding: 16px 48px;
     font-size: 1.2rem;
@@ -123,8 +127,8 @@ body {
     color: #1a56db;
     border-radius: 50px;
     cursor: pointer;
+    text-decoration: none;
     transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.9);
 }
 
 .hero-btn:hover {
@@ -133,59 +137,433 @@ body {
     border-color: #1a56db;
 }
 
-@media (max-width: 480px) {
-    .hero {
-        background-attachment: scroll;
+.services {
+    padding: 80px 0;
+    background: #f8fafc;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    color: #1a56db;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: #1a56db;
+    margin: 15px auto 0;
+    border-radius: 2px;
+}
+
+.advantages-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 80px;
+}
+
+.advantage-card {
+    flex: 1;
+    min-width: 220px;
+    background: white;
+    padding: 30px 20px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    border-bottom: 4px solid #1a56db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.advantage-card:hover {
+    transform: translateY(-5px);
+}
+
+.advantage-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a56db;
+    line-height: 1.4;
+}
+
+.services-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+}
+
+.service-card {
+    flex: 1;
+    min-width: 280px;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    border-left: 4px solid #1a56db;
+}
+
+.service-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateX(5px);
+}
+
+.service-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e293b;
+    flex: 2;
+}
+
+.service-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #1a56db;
+    text-align: right;
+    flex: 1;
+}
+
+.stages {
+    padding: 80px 0;
+    background: white;
+}
+
+.stages-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+}
+
+.stage-card {
+    flex: 1;
+    min-width: 250px;
+    text-align: center;
+    padding: 30px 20px;
+    background: #f8fafc;
+    border-radius: 16px;
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.stage-card:hover {
+    transform: translateY(-5px);
+}
+
+.stage-number {
+    width: 50px;
+    height: 50px;
+    background: #1a56db;
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.stage-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #1a56db;
+    margin-bottom: 15px;
+}
+
+.stage-text {
+    font-size: 0.95rem;
+    color: #475569;
+    line-height: 1.5;
+}
+
+@media (min-width: 900px) {
+    .stage-card:not(:last-child)::after {
+        content: '→';
+        position: absolute;
+        right: -30px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 2rem;
+        color: #1a56db;
+        font-weight: bold;
     }
-    
+}
+
+.auth-section {
+    padding: 80px 0;
+    background: white;
+}
+
+.auth-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background: #f8fafc;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.auth-tab {
+    flex: 1;
+    min-width: 200px;
+}
+
+.auth-tab input[type="radio"] {
+    display: none;
+}
+
+.tab-label {
+    display: block;
+    padding: 15px 20px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #64748b;
+    background: #f1f5f9;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.auth-tab input[type="radio"]:checked + .tab-label {
+    background: white;
+    color: #1a56db;
+    border-bottom: 3px solid #1a56db;
+}
+
+.auth-form {
+    display: none;
+    padding: 30px;
+    background: white;
+}
+
+.auth-tab input[type="radio"]:checked + .tab-label + .auth-form {
+    display: block;
+}
+
+.form-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1a56db;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #1a56db;
+    box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+}
+
+.form-btn {
+    width: 100%;
+    padding: 14px;
+    background: #1a56db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.form-btn:hover {
+    background: #0f3b8a;
+    transform: translateY(-2px);
+}
+
+.contacts {
+    padding: 80px 0;
+    background: #f8fafc;
+}
+
+.contacts-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.contact-info {
+    flex: 1;
+    min-width: 280px;
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.contact-item {
+    margin-bottom: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 15px;
+}
+
+.contact-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.contact-label {
+    width: 120px;
+    font-weight: bold;
+    color: #1a56db;
+    font-size: 1rem;
+}
+
+.contact-value {
+    flex: 1;
+    color: #1e293b;
+    font-size: 1rem;
+}
+
+.contact-map {
+    flex: 1;
+    min-width: 280px;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.map-placeholder {
+    width: 100%;
+    height: 250px;
+    background: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+}
+.auth-tab:first-child {
+    border-right: 2px solid #e2e8f0;
+}
+
+@media (max-width: 1024px) {
+    .hero-title { font-size: 3rem; }
+    .hero-subtitle { font-size: 2rem; }
+    .hero-consult { font-size: 1.3rem; }
+    .section-title { font-size: 2rem; }
+}
+
+@media (max-width: 768px) {
     .hero-logo {
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        font-size: 1rem;
-        padding: 5px 12px;
+        position: static;
+        text-align: center;
+        margin-bottom: 20px;
+        background: none;
     }
+    .hero-title { font-size: 2rem; }
+    .hero-subtitle { font-size: 1.3rem; margin-bottom: 30px; }
+    .hero-consult { font-size: 1rem; padding: 8px 20px; margin-bottom: 40px; }
     
-    .hero-content {
-        padding: 80px 15px 40px;
-    }
+    .services, .stages, .auth-section, .contacts { padding: 50px 0; }
+    .section-title { font-size: 1.8rem; margin-bottom: 35px; }
     
-    .hero-title {
-        font-size: 1.4rem;
-        margin-bottom: 15px;
-    }
+    .advantages-grid { gap: 20px; margin-bottom: 60px; }
+    .advantage-card { min-width: 200px; padding: 20px 15px; }
+    .advantage-text { font-size: 0.9rem; }
     
-    .hero-subtitle {
-        font-size: 0.9rem;
-        margin-bottom: 25px;
-    }
+    .services-grid { gap: 20px; }
+    .service-card { min-width: 250px; padding: 20px; }
+    .service-name { font-size: 0.9rem; }
+    .service-price { font-size: 1rem; }
     
-    .hero-consult {
-        font-size: 0.85rem;
-        padding: 10px 20px;
-        margin-bottom: 30px;
-    }
+    .stages-grid { gap: 25px; }
+    .stage-card { min-width: 200px; padding: 20px; }
+    .stage-number { width: 45px; height: 45px; font-size: 1.5rem; }
+    .stage-name { font-size: 1.1rem; }
+    .stage-text { font-size: 0.85rem; }
     
-    .hero-features {
-        flex-direction: column;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 30px;
-    }
+    .contacts-grid { gap: 30px; }
+    .contact-info { padding: 25px; }
+    .contact-label { width: 100px; font-size: 0.9rem; }
+    .contact-value { font-size: 0.9rem; }
     
-    .feature {
-        min-width: auto;
-        width: 100%;
-        padding: 12px;
-    }
+    .auth-form { padding: 30px; max-width: 400px; }
+    .form-title { font-size: 1.3rem; }
+}
+
+@media (max-width: 600px) {
+    .hero-title { font-size: 1.4rem; }
+    .hero-subtitle { font-size: 1rem; }
+    .hero-consult { font-size: 0.85rem; }
+    .hero-btn { width: 100%; padding: 12px 20px; text-align: center; }
+    .section-title { font-size: 1.4rem; }
     
-    .feature span {
-        font-size: 0.85rem;
-    }
+    .advantages-grid { flex-direction: column; gap: 15px; }
+    .advantage-card { min-width: auto; width: 100%; }
     
-    .hero-btn {
-        width: 100%;
-        padding: 12px 20px;
-        font-size: 0.9rem;
-    }
+    .services-grid { flex-direction: column; }
+    .service-card { min-width: auto; width: 100%; flex-direction: column; text-align: center; gap: 10px; }
+    .service-name { text-align: center; }
+    .service-price { text-align: center; }
+    
+    .stages-grid { flex-direction: column; gap: 30px; }
+    .stage-card { min-width: auto; width: 100%; }
+    .stage-card:not(:last-child)::after { content: '↓'; position: static; display: block; margin-top: 20px; font-size: 1.5rem; transform: none; }
+    
+    .auth-tabs { flex-direction: column; }
+    .auth-tab { min-width: auto; }
+    .auth-form { padding: 20px; }
+    
+    .contacts-grid { flex-direction: column; }
+    .contact-info { min-width: auto; width: 100%; }
+    .contact-item { flex-direction: column; }
+    .contact-label { width: 100%; margin-bottom: 5px; }
+    .contact-map { min-width: auto; width: 100%; }
+    .map-placeholder { height: 200px; }
+}
+
+@media (max-width: 380px) {
+    .hero-title { font-size: 1.2rem; }
+    .hero-subtitle { font-size: 0.85rem; }
+    .section-title { font-size: 1.2rem; }
+    .feature span, .advantage-text, .service-name, .stage-text, .contact-value { font-size: 0.8rem; }
+    .stage-number { width: 40px; height: 40px; font-size: 1.3rem; }
+    .stage-name { font-size: 1rem; }
 }
