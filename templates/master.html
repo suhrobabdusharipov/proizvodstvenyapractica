@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Панель мастера - Ремонт24{% endblock %}
+
+{% block content %}
+<section class="master-panel">
+    <div class="container">
+        <div class="panel-header">
+            <h1 class="panel-title">Панель мастера</h1>
+            <div class="panel-user">
+                <span class="user-name">{{ current_user.full_name }}</span>
+                <span class="user-role master">Мастер</span>
+                <a href="/logout" class="logout-link">Выйти</a>
+            </div>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ requests|length }}</div>
+                <div class="stat-label">Всего заявок</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">
+                    {% set new_count = requests|selectattr('status', 'equalto', 'new')|list|length %}
+                    {{ new_count }}
+                </div>
+                <div class="stat-label">Новых заявок</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">
+                    {% set in_progress = requests|selectattr('status', 'in', ['accepted', 'diagnostics', 'repair'])|list|length %}
+                    {{ in_progress }}
+                </div>
+                <div class="stat-label">В работе</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">
+                    {% set completed = requests|selectattr('status', 'equalto', 'completed')|list|length %}
+                    {{ completed }}
+                </div>
+                <div class="stat-label">Выполнено</div>
+            </div>
+        </div>
+        
+        <div class="requests-section">
+            <h2 class="section-title">Все заявки</h2>
+            
+            {% if requests and requests|length > 0 %}
+                <div class="requests-table">
+                    <div class="table-header">
+                        <div class="col-id">№</div>
+                        <div class="col-client">Клиент</div>
+                        <div class="col-device">Устройство</div>
+                        <div class="col-status">Статус</div>
+                        <div class="col-date">Дата</div>
+                        <div class="col-actions">Действия</div>
+                    </div>
+                    
+                    {% for request in requests %}
+                    <div class="table-row">
+                        <div class="col-id">{{ request.id }}</div>
+                        <div class="col-client">{{ request.client_name }}</div>
+                        <div class="col-device">{{ request.device_type_text }}{% if request.device_model %} ({{ request.device_model }}){% endif %}</div>
+                        <div class="col-status">
+                            <span class="status-badge status-{{ request.status }}">
+                                {{ request.status_text }}
+                            </span>
+                        </div>
+                        <div class="col-date">{{ request.created_at }}</div>
+                        <div class="col-actions">
+                            <a href="/request/{{ request.id }}" class="btn-view">Просмотр</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-requests">
+                    <h3 class="empty-title">Нет заявок</h3>
+                    <p class="empty-text">На данный момент нет ни одной заявки.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
