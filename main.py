@@ -5,6 +5,7 @@ import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from functools import wraps
 from datetime import timedelta
+
 from config import Config
 from models import db, User, RepairCategory, RepairRequest, RequestComment, RequestStatus, UserRole
 
@@ -41,15 +42,15 @@ def create_database_if_not_exists():
         
         if not exists:
             cursor.execute(f'CREATE DATABASE "{db_name}"')
-            print(f" База данных '{db_name}' успешно создана!")
+            print(f"База данных '{db_name}' успешно создана!")
         else:
-            print(f" База данных '{db_name}' уже существует")
+            print(f"База данных '{db_name}' уже существует")
         
         cursor.close()
         conn.close()
         
     except Exception as e:
-        print(f" Ошибка при проверке/создании БД: {e}")
+        print(f"Ошибка при проверке/создании БД: {e}")
 
 def get_status_text(status):
     statuses = {
@@ -112,10 +113,17 @@ def admin_required(f):
 def index_page():
     return render_template('index.html')
 
+
 @app.route('/login', methods=['POST'])
 def login_action():
-    email = request.form.get('email')
-    password = request.form.get('password')
+    email = request.form.get('email', '').strip()
+    password = request.form.get('password', '')
+    
+    if not email:
+        return render_template('index.html', error='Введите email', active_tab='login')
+    
+    if not password:
+        return render_template('index.html', error='Введите пароль', active_tab='login')
     
     user = User.query.filter_by(email=email).first()
     
@@ -136,11 +144,20 @@ def login_action():
 
 @app.route('/register', methods=['POST'])
 def register_action():
-    full_name = request.form.get('full_name')
-    email = request.form.get('email')
-    phone = request.form.get('phone')
-    password = request.form.get('password')
-    confirm = request.form.get('confirm')
+    full_name = request.form.get('full_name', '').strip()
+    email = request.form.get('email', '').strip()
+    phone = request.form.get('phone', '').strip()
+    password = request.form.get('password', '')
+    confirm = request.form.get('confirm', '')
+    
+    if not full_name:
+        return render_template('index.html', register_error='Введите ФИО', active_tab='register')
+    
+    if not email:
+        return render_template('index.html', register_error='Введите email', active_tab='register')
+    
+    if not password:
+        return render_template('index.html', register_error='Введите пароль', active_tab='register')
     
     if len(password) < 8:
         return render_template('index.html', register_error='Пароль должен содержать минимум 8 символов', active_tab='register')
@@ -165,9 +182,9 @@ def register_action():
     
     return render_template('index.html', register_success='Регистрация прошла успешно! Теперь войдите в систему', active_tab='login')
 
-
 @app.route('/logout')
 def logout():
+    """Выход из системы"""
     session.clear()
     return redirect(url_for('index_page'))
 
@@ -175,7 +192,9 @@ def logout():
 @app.route('/user')
 @login_required
 def user_page():
+    """Личный кабинет пользователя (клиент)"""
     user = get_current_user()
+    
     requests = RepairRequest.query.filter_by(client_id=user.id).order_by(RepairRequest.created_at.desc()).all()
     
     requests_data = []
@@ -200,8 +219,10 @@ def user_page():
 @app.route('/master')
 @master_or_admin_required
 def master_page():
+    """Панель мастера"""
     user = get_current_user()
-    requests = RepairRequest.query.order_by(RepairRequest.created_at.desc()).all()
+    
+    requests = RepairRequest.query.filter_by(master_id=user.id).order_by(RepairRequest.created_at.desc()).all()
     
     requests_data = []
     for req in requests:
@@ -245,6 +266,7 @@ def admin_page():
 @app.route('/admin/change-role/<int:user_id>', methods=['POST'])
 @admin_required
 def change_role(user_id):
+    """Изменение роли пользователя"""
     user = User.query.get(user_id)
     if user and user.role != 'admin':
         new_role = request.form.get('new_role')
@@ -256,6 +278,7 @@ def change_role(user_id):
 @app.route('/admin/assign-master/<int:request_id>', methods=['POST'])
 @admin_required
 def assign_master(request_id):
+    """Назначение мастера на заявку"""
     repair_request = RepairRequest.query.get(request_id)
     if repair_request:
         master_id = request.form.get('master_id')
@@ -267,6 +290,7 @@ def assign_master(request_id):
 @app.route('/admin/change-status/<int:request_id>', methods=['POST'])
 @admin_required
 def change_status(request_id):
+    """Изменение статуса заявки"""
     repair_request = RepairRequest.query.get(request_id)
     if repair_request:
         new_status = request.form.get('new_status')
@@ -278,7 +302,73 @@ def change_status(request_id):
 @app.route('/health')
 def health():
     return jsonify({'status': 'ok', 'service': 'Ремонт24'}), 200
+    
+@app.route('/create-request', methods=['POST'])
+@login_required
+def create_request():
+    """Создание новой заявки"""
+    user = get_current_user()
+    
+    device_type = request.form.get('device_type')
+    device_model = request.form.get('device_model')
+    category_id = request.form.get('category_id')
+    preferred_date = request.form.get('preferred_date')
+    preferred_time = request.form.get('preferred_time')
+    address = request.form.get('address')
+    issue_description = request.form.get('issue_description')
+    
+    if not device_type or not category_id or not issue_description:
+        return redirect(url_for('user_page') + '#create-request-form')
+    
+    category = RepairCategory.query.get(category_id)
+    if not category:
+        return redirect(url_for('user_page') + '#create-request-form')
+    
+    repair_request = RepairRequest(
+        client_id=user.id,
+        category_id=int(category_id),
+        device_type=device_type,
+        device_model=device_model,
+        issue_description=issue_description,
+        status='new',
+        total_price=category.price
+    )
+    
+    if preferred_date:
+        repair_request.preferred_date = preferred_date
+    if preferred_time:
+        repair_request.preferred_time = preferred_time
+    if address:
+        repair_request.address = address
+    
+    db.session.add(repair_request)
+    db.session.commit()
+    
+    return redirect(url_for('user_page') + '#requests-section')
 
+@app.route('/request/<int:request_id>')
+@login_required
+def request_detail_page(request_id):
+    user = get_current_user()
+    
+    repair_request = RepairRequest.query.get(request_id)
+    if not repair_request:
+        return "Заявка не найдена", 404
+    
+    if user.role == 'client' and repair_request.client_id != user.id:
+        return "У вас нет доступа к этой заявке", 403
+    
+    if user.role == 'admin':
+        back_url = '/admin'
+    elif user.role == 'master':
+        back_url = '/master'
+    else:
+        back_url = '/user'
+    
+    return render_template('request_detail.html', 
+                         request=repair_request, 
+                         back_url=back_url,
+                         current_user=user)
 
 @app.route('/api/auth/register', methods=['POST'])
 def api_register():
@@ -365,21 +455,21 @@ def api_create_request():
 
 with app.app_context():
     print("\n" + "=" * 50)
-    print("🛠 Ремонт24 - Запуск приложения")
+    print("Ремонт24 - Запуск приложения")
     print("=" * 50)
     
     create_database_if_not_exists()
+    
     try:
         db.create_all()
-        print("✅ Таблицы базы данных созданы/проверены")
+        print("Таблицы базы данных созданы/проверены")
     except Exception as e:
-        print(f"❌ Ошибка создания таблиц: {e}")
+        print(f"Ошибка создания таблиц: {e}")
     
     print("\n" + "=" * 50)
 
 if __name__ == '__main__':
-    print("\n🚀 Ремонт24 запущен!")
-    print("📍 http://localhost:5000")
+    print("\nРемонт24 запущен!")
+    print("http://localhost:5000")
     print("=" * 50 + "\n")
-    
     app.run(host='0.0.0.0', port=5000, debug=True)
