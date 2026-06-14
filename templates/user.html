@@ -12,17 +12,77 @@
             <div class="cabinet-user">
                 <span class="user-name">{{ current_user.full_name }}</span>
                 <span class="user-role client">Клиент</span>
+                <a href="/logout" class="logout-btn">Выйти</a>
             </div>
         </div>
-        
+
         <div class="create-request-btn-container">
-            <a href="#create-request-form" class="btn-primary create-btn">+ Создать новую заявку</a>
+            <a href="#create-request-form" class="btn-primary create-btn">Создать новую заявку</a>
+        </div>
+        
+        <div class="requests-section" id="requests-section">
+            <h2 class="section-title">Мои заявки</h2>
+            
+            {% if requests and requests|length > 0 %}
+                <div class="requests-list">
+                    {% for request in requests %}
+                    <div class="request-card">
+                        <div class="request-header">
+                            <span class="request-id">Заявка №{{ request.id }}</span>
+                            <span class="status-badge status-{{ request.status }}">
+                                {{ request.status_text }}
+                            </span>
+                        </div>
+                        <div class="request-body">
+                            <div class="request-info">
+                                <div class="info-row">
+                                    <span class="info-label">Устройство:</span>
+                                    <span class="info-value">{{ request.device_type_text }}{% if request.device_model %} ({{ request.device_model }}){% endif %}</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Услуга:</span>
+                                    <span class="info-value">{{ request.category_name }}</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Стоимость:</span>
+                                    <span class="info-value price">{{ request.total_price }} ₽</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Дата создания:</span>
+                                    <span class="info-value">{{ request.created_at }}</span>
+                                </div>
+                                {% if request.master_name %}
+                                <div class="info-row">
+                                    <span class="info-label">Мастер:</span>
+                                    <span class="info-value">{{ request.master_name }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="request-description">
+                                <strong>Описание проблемы:</strong>
+                                <p>{{ request.issue_description }}</p>
+                            </div>
+                        </div>
+                        <div class="request-footer">
+                            <a href="/request/{{ request.id }}" class="btn-detail">Подробнее →</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-requests">
+                    <div class="empty-icon">📋</div>
+                    <h3 class="empty-title">У вас пока нет заявок</h3>
+                    <p class="empty-text">Создайте первую заявку на ремонт, и мы свяжемся с вами в ближайшее время.</p>
+                    <a href="#create-request-form" class="btn-primary empty-btn">Создать заявку</a>
+                </div>
+            {% endif %}
         </div>
         
         <div id="create-request-form" class="create-request-form">
             <h2 class="form-title">Новая заявка на ремонт</h2>
             
-            <form action="/create-request" method="POST">
+            <form action="/create-request#requests-section" method="POST">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="device_type">Тип устройства *</label>
@@ -97,73 +157,6 @@
                     <button type="submit" class="btn-primary">Отправить заявку</button>
                 </div>
             </form>
-        </div>
-        
-        <div class="requests-section" id="requests-section">
-            <h2 class="section-title">Мои заявки</h2>
-            
-            {% if requests and requests|length > 0 %}
-                <div class="requests-list">
-                    {% for request in requests %}
-                    <div class="request-card">
-                        <div class="request-header">
-                            <span class="request-id">Заявка №{{ request.id }}</span>
-                            <span class="status-badge status-{{ request.status }}">
-                                {{ request.status_text }}
-                            </span>
-                        </div>
-                        <div class="request-body">
-                            <div class="request-info">
-                                <div class="info-row">
-                                    <span class="info-label">Устройство:</span>
-                                    <span class="info-value">{{ request.device_type_text }}{% if request.device_model %} ({{ request.device_model }}){% endif %}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Услуга:</span>
-                                    <span class="info-value">{{ request.category_name }}</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Стоимость:</span>
-                                    <span class="info-value price">{{ request.total_price }} ₽</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Дата создания:</span>
-                                    <span class="info-value">{{ request.created_at }}</span>
-                                </div>
-                                {% if request.preferred_date %}
-                                <div class="info-row">
-                                    <span class="info-label">Удобная дата:</span>
-                                    <span class="info-value">{{ request.preferred_date }}</span>
-                                </div>
-                                {% endif %}
-                                {% if request.master_name %}
-                                <div class="info-row">
-                                    <span class="info-label">Мастер:</span>
-                                    <span class="info-value">{{ request.master_name }}</span>
-                                </div>
-                                {% endif %}
-                            </div>
-                            <div class="request-description">
-                                <strong>Описание проблемы:</strong>
-                                <p>{{ request.issue_description }}</p>
-                            </div>
-                        </div>
-                        <div class="request-footer">
-                            <a href="/request/{{ request.id }}" class="btn-detail">Подробнее →</a>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="empty-requests">
-                    <div class="empty-icon">
-                        📋
-                    </div>
-                    <h3 class="empty-title">У вас пока нет заявок</h3>
-                    <p class="empty-text">Создайте первую заявку на ремонт, и мы свяжемся с вами в ближайшее время.</p>
-                    <a href="#create-request-form" class="btn-primary empty-btn">Создать заявку</a>
-                </div>
-            {% endif %}
         </div>
     </div>
 </section>

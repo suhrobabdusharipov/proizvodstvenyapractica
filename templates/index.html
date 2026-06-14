@@ -3,6 +3,34 @@
 {% block title %}Главная - Ремонт компьютеров в Красноярске{% endblock %}
 
 {% block content %}
+<script>
+    window.addEventListener('load', function() {
+        const errorMsg = document.querySelector('.error-message');
+        const successMsg = document.querySelector('.success-message');
+        
+        if (errorMsg || successMsg) {
+            const authSection = document.getElementById('auth-section');
+            if (authSection) {
+                authSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            const registerError = '{{ register_error }}';
+            const registerSuccess = '{{ register_success }}';
+            
+            if (registerError || registerSuccess) {
+                const registerRadio = document.getElementById('tab-register');
+                if (registerRadio) {
+                    registerRadio.checked = true;
+                }
+            } else {
+                const loginRadio = document.getElementById('tab-login');
+                if (loginRadio) {
+                    loginRadio.checked = true;
+                }
+            }
+        }
+    });
+</script>
+
 <section class="hero">
     <div class="hero-overlay"></div>
     <div class="hero-content">
@@ -11,12 +39,12 @@
         </div>
         
         <h1 class="hero-title">
-            <span class = "white-text">РЕМОНТ</span> КОМПЬЮТЕРОВ,<br>
+            <span class="white-text">РЕМОНТ</span> КОМПЬЮТЕРОВ,<br>
             НОУТБУКОВ И МОНОБЛОКОВ
         </h1>
         
         <p class="hero-subtitle">
-            НА ДОМУ <span class = "white-text">В КРАСНОЯРСКЕ</span>
+            НА ДОМУ <span class="white-text">В КРАСНОЯРСКЕ</span>
         </p>
         
         <div class="hero-consult underline-blue">
@@ -37,6 +65,7 @@
                 <span>Гарантия на все работы<br>до 2-х лет</span>
             </div>
         </div>
+        
         <a href="#auth-section" class="hero-btn">Оставить заявку</a>
     </div>
 </section>
@@ -119,9 +148,27 @@
     <div class="container">
         <h2 class="section-title">ВХОД / РЕГИСТРАЦИЯ</h2>
         
+        {% if error %}
+        <div class="message error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        {% if register_error %}
+        <div class="message error-message">
+            {{ register_error }}
+        </div>
+        {% endif %}
+        
+        {% if register_success %}
+        <div class="message success-message">
+            {{ register_success }}
+        </div>
+        {% endif %}
+        
         <div class="auth-tabs">
             <div class="auth-tab">
-                <input type="radio" name="auth-tab" id="tab-login" checked>
+                <input type="radio" name="auth-tab" id="tab-login" {% if active_tab != 'register' %}checked{% endif %}>
                 <label for="tab-login" class="tab-label">Вход</label>
                 <div class="auth-form">
                     <form action="/login" method="POST">
@@ -139,7 +186,7 @@
             </div>
             
             <div class="auth-tab">
-                <input type="radio" name="auth-tab" id="tab-register">
+                <input type="radio" name="auth-tab" id="tab-register" {% if active_tab == 'register' %}checked{% endif %}>
                 <label for="tab-register" class="tab-label">Регистрация</label>
                 <div class="auth-form">
                     <form action="/register" method="POST">
@@ -156,12 +203,12 @@
                             <input type="tel" id="register-phone" name="phone" placeholder="+7 (999) 123-45-67">
                         </div>
                         <div class="form-group">
-                            <label for="register-password">Пароль:</label>
-                            <input type="password" id="register-password" name="password" placeholder="••••••" required>
+                            <label for="register-password">Пароль (мин. 8 символов):</label>
+                            <input type="password" id="register-password" name="password" placeholder="••••••••" minlength="8" required>
                         </div>
                         <div class="form-group">
                             <label for="register-confirm">Подтверждение пароля:</label>
-                            <input type="password" id="register-confirm" name="confirm" placeholder="••••••" required>
+                            <input type="password" id="register-confirm" name="confirm" placeholder="••••••••" required>
                         </div>
                         <button type="submit" class="form-btn">Зарегистрироваться</button>
                     </form>
@@ -183,7 +230,7 @@
                 </div>
                 <div class="contact-item">
                     <div class="contact-label">Режим работы:</div>
-                    <div class="contact-value">Ежедневно с 08:00 до 21:00</div>
+                    <div class="contact-value">Ежедневно с 08:00 до 22:00</div>
                 </div>
                 <div class="contact-item">
                     <div class="contact-label">Телефон:</div>
