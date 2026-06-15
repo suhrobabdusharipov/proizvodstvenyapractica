@@ -106,16 +106,16 @@ curl http://localhost:5000/health
 Ожидаемый ответ: {"status":"ok"}
 
 
-### Запуск через Docker (позже будет добавлен)
+### Запуск через Docker
 
 #### 1. Убедитесь, что Docker установлен
 
-docker --version  
-docker-compose --version
+docker --version
+docker compose version
 
 #### 2. Клонировать репозиторий
 
-git clone https://github.com/suhrobabdusharipov/proizvodstvenyapractica.git  
+git clone https://github.com/suhrobabdusharipov/proizvodstvenyapractica.git
 cd proizvodstvenyapractica
 
 #### 3. Запустить все сервисы одной командой
@@ -125,23 +125,25 @@ docker compose up --build
 Docker Compose поднимет:
 - PostgreSQL (порт 5432)
 - Backend Flask (порт 5000)
-- pgAdmin4 (порт 5050)
 
 #### 4. Инициализировать базу данных внутри контейнера
 
 В отдельном терминале:
 
-docker compose exec backend python init_db.py
+docker compose exec web python init_db.py
 
 #### 5. Открыть в браузере
 
 - API: http://localhost:5000
 - Health check: http://localhost:5000/health
-- pgAdmin4: http://localhost:5050 (email: ваша_почта, пароль: ваш_пароль)
 
 #### 6. Остановить все контейнеры
 
 docker compose down
+
+#### 7. Остановить и удалить том с БД
+
+docker compose down -v
 
 ## Тестирование
 
