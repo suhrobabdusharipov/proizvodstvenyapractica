@@ -6,8 +6,8 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from functools import wraps
 from datetime import timedelta
 
-from config import Config
-from models import db, User, RepairCategory, RepairRequest, RequestComment, RequestStatus, UserRole
+from backend.config import Config
+from backend.app.models import db, User, RepairCategory, RepairRequest, RequestComment, RequestStatus, UserRole
 
 app = Flask(__name__,
     template_folder='templates',
