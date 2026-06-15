@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Заявка №{{ request.id }} - Ремонт24{% endblock %}
+
+{% block content %}
+<section class="request-detail">
+    <div class="container">
+        <div class="detail-header">
+            <h1 class="detail-title">Заявка №{{ request.id }}</h1>
+            <div class="detail-status">
+                <span class="status-badge status-{{ request.status }}">
+                    {% if request.status == 'new' %}Новая
+                    {% elif request.status == 'accepted' %}Принята
+                    {% elif request.status == 'diagnostics' %}Диагностика
+                    {% elif request.status == 'repair' %}Ремонт
+                    {% elif request.status == 'ready' %}Готова
+                    {% elif request.status == 'completed' %}Выдана
+                    {% elif request.status == 'cancelled' %}Отменена
+                    {% else %}{{ request.status }}
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        
+        <div class="detail-info">
+            <div class="info-card">
+                <h3>Информация об устройстве</h3>
+                <div class="info-row">
+                    <span class="info-label">Тип устройства:</span>
+                    <span class="info-value">
+                        {% if request.device_type == 'pc' %}Компьютер (ПК)
+                        {% elif request.device_type == 'notebook' %}Ноутбук
+                        {% elif request.device_type == 'monoblock' %}Моноблок
+                        {% else %}{{ request.device_type }}
+                        {% endif %}
+                    </span>
+                </div>
+                {% if request.device_model %}
+                <div class="info-row">
+                    <span class="info-label">Модель:</span>
+                    <span class="info-value">{{ request.device_model }}</span>
+                </div>
+                {% endif %}
+                <div class="info-row">
+                    <span class="info-label">Услуга:</span>
+                    <span class="info-value">{{ request.category.name if request.category else 'Не указана' }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Стоимость:</span>
+                    <span class="info-value price">{{ request.total_price }} ₽</span>
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3>Даты</h3>
+                <div class="info-row">
+                    <span class="info-label">Дата создания:</span>
+                    <span class="info-value">{{ request.created_at.strftime('%d.%m.%Y %H:%M') if request.created_at else '' }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Последнее обновление:</span>
+                    <span class="info-value">{{ request.updated_at.strftime('%d.%m.%Y %H:%M') if request.updated_at else '' }}</span>
+                </div>
+                {% if request.completed_at %}
+                <div class="info-row">
+                    <span class="info-label">Дата завершения:</span>
+                    <span class="info-value">{{ request.completed_at.strftime('%d.%m.%Y') if request.completed_at else '' }}</span>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="info-card">
+                <h3>Клиент</h3>
+                <div class="info-row">
+                    <span class="info-label">ФИО:</span>
+                    <span class="info-value">{{ request.client.full_name if request.client else '' }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Телефон:</span>
+                    <span class="info-value">{{ request.client.phone if request.client else '' }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">{{ request.client.email if request.client else '' }}</span>
+                </div>
+            </div>
+            
+            {% if request.master_id %}
+            <div class="info-card">
+                <h3>Мастер</h3>
+                <div class="info-row">
+                    <span class="info-label">ФИО:</span>
+                    <span class="info-value">{{ request.assigned_master.full_name if request.assigned_master else 'Не назначен' }}</span>
+                </div>
+            </div>
+            {% endif %}
+            
+            <div class="info-card full-width">
+                <h3>Описание проблемы</h3>
+                <p class="description-text">{{ request.issue_description }}</p>
+            </div>
+            
+            {% if request.address %}
+            <div class="info-card">
+                <h3>Адрес</h3>
+                <p class="address-text">{{ request.address }}</p>
+            </div>
+            {% endif %}
+            
+            {% if request.preferred_date or request.preferred_time %}
+            <div class="info-card">
+                <h3>Удобное время для визита</h3>
+                <div class="info-row">
+                    <span class="info-label">Дата:</span>
+                    <span class="info-value">{{ request.preferred_date }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Время:</span>
+                    <span class="info-value">{{ request.preferred_time }}</span>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+       <div class="detail-actions">
+            <a href="{{ back_url }}" class="btn-secondary">← Назад к заявкам</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
