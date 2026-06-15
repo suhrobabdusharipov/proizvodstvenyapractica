@@ -37,18 +37,19 @@ jobs:
     - name: Установка зависимостей
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r backend/requirements.txt
         pip install pytest flake8
     
     - name: Проверка кода (flake8)
       run: |
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 backend/ --count --select=E9,F63,F7,F82 --show-source --statistics
       continue-on-error: true
     
     - name: Проверка импортов
       run: |
+        cd backend
         python -c "from config import Config; print('config.py OK')"
-        python -c "from models import db, User; print('models.py OK')"
+        python -c "from app.models import db, User; print('models.py OK')"
     
     - name: Запуск тестов
       env:
@@ -58,6 +59,7 @@ jobs:
         DB_USER: postgres
         DB_PASSWORD: postgres123
       run: |
+        cd backend
         python -m pytest tests/ -v || echo "Тесты выполнены"
     
     - name: Проверка Docker сборки
@@ -74,9 +76,9 @@ jobs:
     - name: Клонирование репозитория
       uses: actions/checkout@v4
     
-    - name: Деплой на Render
+    - name: Деплой на PythonAnywhere
       run: |
-        echo "Деплой на Render"
-        echo "Для автоматического деплоя добавь секреты:"
-        echo "RENDER_API_KEY и RENDER_SERVICE_ID"
-        echo "Или настрой авто-деплой в панели Render"
+        echo "Деплой на PythonAnywhere"
+        echo "Сайт: https://redvana.pythonanywhere.com"
+        echo "Для автоматического деплоя настрой webhook в PythonAnywhere"
+        echo "Или обновляй код вручную через git pull"

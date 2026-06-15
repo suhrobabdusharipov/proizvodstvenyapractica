@@ -1,4 +1,4 @@
-# Ремонт24 - Система учёта заявок на ремонт ПК и ноутбуков(документация будет изменяться в будущем)
+# Ремонт24 - Система учёта заявок на ремонт ПК и ноутбуков
 
 ## О проекте
 
@@ -13,32 +13,29 @@
 
 ### Роли пользователей
 
-| Роль       | Возможности                                                                 |
-|------------|-----------------------------------------------------------------------------|
-| **Клиент** | Создание заявки, просмотр своих заявок, добавление комментариев             |
-| **Мастер** | Просмотр всех заявок, изменение статуса, добавление внутренних комментариев |
-| **Админ**  | Полный доступ: управление пользователями, назначение мастеров, удаление     |
+| Роль | Возможности |
+|------|-------------|
+| **Клиент** | Создание заявки, просмотр своих заявок, добавление комментариев |
+| **Мастер** | Просмотр назначенных заявок, изменение статуса, добавление внутренних комментариев |
+| **Админ** | Полный доступ: управление пользователями, назначение мастеров, удаление |
 
 ### Основной цикл заявки
 Новая → Принята → Диагностика → Ремонт → Готова → Выдана
 
-Отмена, комментарий, запчасти доступны на соответствующих этапах
-
 ## Технологии
 
 ### Backend
-- **Python 3.13**
+- **Python 3.11**
 - **Flask** - микрофреймворк для API
 - **Flask-SQLAlchemy** - ORM для работы с БД
 - **Flask-JWT-Extended** - JWT-авторизация
 - **Flask-CORS** - кросс-доменные запросы
-- **PostgreSQL** - реляционная база данных
-- **pgAdmin4** - управление БД
+- **SQLite / PostgreSQL** - реляционная база данных
 
 ### Инфраструктура
 - **Docker** и **Docker Compose** - контейнеризация
 - **GitHub Actions** - CI/CD автоматизация
-- **Render.com** - деплой
+- **PythonAnywhere** - деплой
 
 ### Инструменты
 - **Git** - контроль версий
@@ -48,7 +45,7 @@
 
 ### Требования
 
-- Python 3.13
+- Python 3.11+  
 - PostgreSQL 15+ или Docker
 - Git
 - Docker и Docker Compose
@@ -70,41 +67,23 @@ venv\Scripts\activate         # Windows
 
 pip install -r requirements.txt
 
-#### 4. Настроить переменные окружения
+#### 4. Создать базу данных SQLite 
 
-Создайте файл .env в папке backend/:
-
-DB_HOST=localhost  
-DB_PORT=5432  
-DB_NAME=pc_repair_db  
-DB_USER=ваш_юзер  
-DB_PASSWORD=ваш_пароль  
-
-JWT_SECRET_KEY=секретный_ключ_минимум_32_символа  
-SECRET_KEY=flask_secret_key  
-
-#### 5. Создать базу данных в PostgreSQL
-
-Подключитесь к PostgreSQL и выполните:
-
-CREATE DATABASE pc_repair_db;
-
-#### 6. Инициализировать базу данных
+При первом запуске база данных создастся автоматически. Для заполнения тестовыми данными:
 
 python init_db.py
 
-#### 7. Запустить сервер
+#### 5. Запустить сервер
 
 python main.py
 
 Сервер будет доступен по адресу: http://localhost:5000
 
-#### 8. Проверить работоспособность
+#### 6. Проверить работоспособность  
 
 curl http://localhost:5000/health
 
 Ожидаемый ответ: {"status":"ok"}
-
 
 ### Запуск через Docker
 
@@ -115,10 +94,10 @@ docker compose version
 
 #### 2. Клонировать репозиторий
 
-git clone https://github.com/suhrobabdusharipov/proizvodstvenyapractica.git
-cd proizvodstvenyapractica
+git clone https://github.com/suhrobabdusharipov/proizvodstvenyapractica.git  
+cd proizvodstvenyapractica  
 
-#### 3. Запустить все сервисы одной командой
+#### 3. Запустить все сервисы  
 
 docker compose up --build
 
@@ -137,7 +116,7 @@ docker compose exec web python init_db.py
 - API: http://localhost:5000
 - Health check: http://localhost:5000/health
 
-#### 6. Остановить все контейнеры
+#### 6. Остановить контейнеры
 
 docker compose down
 
@@ -153,54 +132,70 @@ docker compose down -v
 
 | ID | Название | Шаги | Ожидаемый результат |
 |----|----------|------|---------------------|
-| TC-01 | Успешная авторизация клиента | POST /api/auth/login с валидными данными (client@remont24.ru / client123) | HTTP 200, получен JWT токен |
-| TC-02 | Неверный пароль | POST /api/auth/login с правильным email, неверным паролем | HTTP 401, сообщение об ошибке |
+| TC-01 | Успешная авторизация клиента | POST /api/auth/login с валидными данными | HTTP 200, получен JWT токен |
+| TC-02 | Неверный пароль | POST /api/auth/login с неверным паролем | HTTP 401, сообщение об ошибке |
 | TC-03 | Несуществующий email | POST /api/auth/login с email не из БД | HTTP 401, пользователь не найден |
-| TC-04 | Создание заявки клиентом | POST /api/requests с JWT клиента, валидные данные | HTTP 201, заявка создана |
+| TC-04 | Создание заявки клиентом | POST /api/requests с JWT клиента | HTTP 201, заявка создана |
 | TC-05 | Создание заявки без авторизации | POST /api/requests без JWT токена | HTTP 401, требуется авторизация |
 | TC-06 | Просмотр списка заявок мастером | GET /api/requests с JWT мастера | HTTP 200, список всех заявок |
 | TC-07 | Просмотр списка заявок клиентом | GET /api/requests с JWT клиента | HTTP 200, только свои заявки |
 | TC-08 | Просмотр одной заявки | GET /api/requests/1 с валидным JWT | HTTP 200, детали заявки |
 | TC-09 | Доступ клиента к чужой заявке | GET /api/requests/5 (заявка другого клиента) | HTTP 403, доступ запрещён |
-| TC-10 | Изменение статуса мастером | PUT /api/requests/1/status с новым статусом "diagnostics" | HTTP 200, статус обновлён |
+| TC-10 | Изменение статуса мастером | PUT /api/requests/1/status с новым статусом | HTTP 200, статус обновлён |
 | TC-11 | Изменение статуса клиентом | PUT /api/requests/1/status с JWT клиента | HTTP 403, недостаточно прав |
 | TC-12 | Некорректный статус | PUT /api/requests/1/status со статусом "invalid" | HTTP 400, ошибка валидации |
 | TC-13 | Добавление комментария | POST /api/comments с текстом к заявке | HTTP 201, комментарий создан |
-| TC-14 | Пустой комментарий | POST /api/comments с пустым comment_text | HTTP 400, текст обязателен |
+| TC-14 | Пустой комментарий | POST /api/comments с пустым text | HTTP 400, текст обязателен |
 | TC-15 | Поиск по модели устройства | GET /api/requests?search=ThinkPad | Только заявки с ThinkPad |
 | TC-16 | Фильтр по статусу | GET /api/requests?status=repair | Только заявки со статусом "ремонт" |
 | TC-17 | Фильтр по категории | GET /api/requests?category_id=1 | Только заявки с категорией 1 |
 | TC-18 | Пустое поле при создании | POST /api/requests с пустым issue_description | HTTP 400, ошибка валидации |
-| TC-19 | Слишком длинное описание | POST /api/requests с описанием более 1000 символов | HTTP 400, превышена длина |
+| TC-19 | Слишком длинное описание | POST /api/requests с описанием >1000 символов | HTTP 400, превышена длина |
 | TC-20 | Регистрация нового пользователя | POST /api/auth/register с валидными данными | HTTP 201, пользователь создан |
-| TC-21 | Регистрация с существующим email | POST /api/auth/register с email client@remont24.ru | HTTP 409, email уже используется |
+| TC-21 | Регистрация с существующим email | POST /api/auth/register с существующим email | HTTP 409, email уже используется |
 | TC-22 | Получение категорий ремонта | GET /api/categories | HTTP 200, список категорий |
 | TC-23 | Создание заявки с несуществующей категорией | POST /api/requests с category_id=999 | HTTP 404, категория не найдена |
-| TC-24 | Назначение мастера админом | PUT /api/requests/1/assign с master_id=2 и JWT админа | HTTP 200, мастер назначен |
+| TC-24 | Назначение мастера админом | PUT /api/requests/1/assign с JWT админа | HTTP 200, мастер назначен |
 | TC-25 | Назначение мастера клиентом | PUT /api/requests/1/assign с JWT клиента | HTTP 403, недостаточно прав |
 
-## Запуск тестов
+### Запуск тестов
 
-### Установка тестовых зависимостей
 pip install pytest pytest-flask requests
 
-### Запуск всех тестов
 pytest tests/ -v
 
-### Запуск конкретного файла
 pytest tests/test_auth.py -v
 
-### Запуск с подробным выводом
-pytest tests/ -v --tb=short
+---
 
 ## Деплой
 
 ### Где опубликовано?
 
-Проект развёрнут на Render.com
+Проект развёрнут на PythonAnywhere
 
-- Ссылка на приложение: **ПОЯВИТСЯ ПОЗЖЕ**
-- Health check: **ПОЯВИТСЯ ПОЗЖЕ**
+- Ссылка на приложение: https://redvana.pythonanywhere.com
+- Health check: https://redvana.pythonanywhere.com/health
+
+### Тестовые данные для входа на сайте
+
+| Роль | Email | Пароль |
+|------|-------|--------|
+| Админ | admin@remont24.ru | admin123 |
+| Мастер | master1@remont24.ru | master123 |
+| Клиент | client@remont24.ru | client123 |
+
+## CI/CD
+
+Проект использует GitHub Actions для автоматической проверки кода при каждом push в репозиторий.
+
+Что проверяется:
+- Установка зависимостей
+- Линтинг кода 
+- Запуск тестов 
+- Сборка Docker образа
+
+Статус проверки отображается в репозитории GitHub.
 
 ## Лицензия
 
@@ -209,6 +204,6 @@ pytest tests/ -v --tb=short
 ## Контакты
 
 По вопросам: suhrobarakcaa@gmail.com  
-GitHub репозиторий: https://github.com/suhrobabdusharipov/proizvodstvenyapractica.git
+GitHub репозиторий: https://github.com/suhrobabdusharipov/proizvodstvenyapractica  
 
 © 2026 - Система учёта заявок на ремонт ПК и ноутбуков
