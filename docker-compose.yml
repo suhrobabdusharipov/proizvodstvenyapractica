@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: remont24_db
+    environment:
+      POSTGRES_DB: remont24_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - remont24_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    container_name: remont24_web
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: remont24_db
+      DB_USER: postgres
+      DB_PASSWORD: postgres123
+      SECRET_KEY: remont24-secret-key-2025
+      JWT_SECRET_KEY: remont24-jwt-secret-key-2025
+      FLASK_ENV: development
+    volumes:
+      - .:/app
+    networks:
+      - remont24_network
+
+volumes:
+  postgres_data:
+
+networks:
+  remont24_network:
+    driver: bridge
