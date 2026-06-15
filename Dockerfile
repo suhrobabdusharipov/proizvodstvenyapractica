@@ -2,15 +2,13 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Устанавливаем зависимости
-COPY requirements.txt .
+COPY backend/requirements.txt .
+
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируем код
-COPY . .
+COPY backend/ .
+COPY frontend/ ./frontend/
 
-# Указываем порт
 EXPOSE 5000
 
-# Запуск приложения
 CMD ["python", "main.py"]
