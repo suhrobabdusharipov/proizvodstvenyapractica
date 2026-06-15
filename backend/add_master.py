@@ -1,5 +1,5 @@
 from backend.main import app, db
-from models import User
+from app.models import User
 
 with app.app_context():
     masters = [

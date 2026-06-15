@@ -4,7 +4,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pytest
 from backend.main import app, db
-from models import User
+from backend.app.models import User
 
 @pytest.fixture
 def client():
