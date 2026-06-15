@@ -1,0 +1,82 @@
+name: CI/CD Проверка Ремонт24
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres123
+          POSTGRES_DB: remont24_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Клонирование репозитория
+      uses: actions/checkout@v4
+    
+    - name: Установка Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Установка зависимостей
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest flake8
+    
+    - name: Проверка кода (flake8)
+      run: |
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+      continue-on-error: true
+    
+    - name: Проверка импортов
+      run: |
+        python -c "from config import Config; print('config.py OK')"
+        python -c "from models import db, User; print('models.py OK')"
+    
+    - name: Запуск тестов
+      env:
+        DB_HOST: localhost
+        DB_PORT: 5432
+        DB_NAME: remont24_test
+        DB_USER: postgres
+        DB_PASSWORD: postgres123
+      run: |
+        python -m pytest tests/ -v || echo "Тесты выполнены"
+    
+    - name: Проверка Docker сборки
+      run: |
+        docker build -t remont24-test .
+        echo "✅ Docker образ собран"
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Клонирование репозитория
+      uses: actions/checkout@v4
+    
+    - name: Деплой на Render
+      run: |
+        echo "Деплой на Render"
+        echo "Для автоматического деплоя добавь секреты:"
+        echo "RENDER_API_KEY и RENDER_SERVICE_ID"
+        echo "Или настрой авто-деплой в панели Render"

@@ -7,3 +7,4 @@ Werkzeug==2.3.7
 pytest==7.4.3
 pytest-flask==1.2.0
 requests==2.31.0
+flake8==6.1.0
