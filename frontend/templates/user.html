@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Личный кабинет - Ремонт24{% endblock %}
+
+{% block content %}
+<section class="user-cabinet">
+    <div class="container">
+        <div class="cabinet-header">
+            <h1 class="cabinet-title">
+                Личный кабинет
+            </h1>
+            <div class="cabinet-user">
+                <span class="user-name">{{ current_user.full_name }}</span>
+                <span class="user-role client">Клиент</span>
+                <a href="/logout" class="logout-btn">Выйти</a>
+            </div>
+        </div>
+
+        <div class="create-request-btn-container">
+            <a href="#create-request-form" class="btn-primary create-btn">Создать новую заявку</a>
+        </div>
+        
+        <div class="requests-section" id="requests-section">
+            <h2 class="section-title">Мои заявки</h2>
+            
+            {% if requests and requests|length > 0 %}
+                <div class="requests-list">
+                    {% for request in requests %}
+                    <div class="request-card">
+                        <div class="request-header">
+                            <span class="request-id">Заявка №{{ request.id }}</span>
+                            <span class="status-badge status-{{ request.status }}">
+                                {{ request.status_text }}
+                            </span>
+                        </div>
+                        <div class="request-body">
+                            <div class="request-info">
+                                <div class="info-row">
+                                    <span class="info-label">Устройство:</span>
+                                    <span class="info-value">{{ request.device_type_text }}{% if request.device_model %} ({{ request.device_model }}){% endif %}</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Услуга:</span>
+                                    <span class="info-value">{{ request.category_name }}</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Стоимость:</span>
+                                    <span class="info-value price">{{ request.total_price }} ₽</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Дата создания:</span>
+                                    <span class="info-value">{{ request.created_at }}</span>
+                                </div>
+                                {% if request.master_name %}
+                                <div class="info-row">
+                                    <span class="info-label">Мастер:</span>
+                                    <span class="info-value">{{ request.master_name }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="request-description">
+                                <strong>Описание проблемы:</strong>
+                                <p>{{ request.issue_description }}</p>
+                            </div>
+                        </div>
+                        <div class="request-footer">
+                            <a href="/request/{{ request.id }}" class="btn-detail">Подробнее →</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-requests">
+                    <div class="empty-icon">📋</div>
+                    <h3 class="empty-title">У вас пока нет заявок</h3>
+                    <p class="empty-text">Создайте первую заявку на ремонт, и мы свяжемся с вами в ближайшее время.</p>
+                    <a href="#create-request-form" class="btn-primary empty-btn">Создать заявку</a>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div id="create-request-form" class="create-request-form">
+            <h2 class="form-title">Новая заявка на ремонт</h2>
+            
+            <form action="/create-request#requests-section" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="device_type">Тип устройства *</label>
+                        <select id="device_type" name="device_type" required>
+                            <option value="pc">Компьютер (ПК)</option>
+                            <option value="notebook">Ноутбук</option>
+                            <option value="monoblock">Моноблок</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="device_model">Модель устройства</label>
+                        <input type="text" id="device_model" name="device_model" placeholder="Например: Lenovo ThinkPad T480">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category_id">Услуга *</label>
+                        <select id="category_id" name="category_id" required>
+                            <option value="">Выберите услугу</option>
+                            <option value="1">Диагностика - 500₽</option>
+                            <option value="2">Замена клавиатуры - 1500₽</option>
+                            <option value="3">Чистка от пыли - 1000₽</option>
+                            <option value="4">Установка Windows - 800₽</option>
+                            <option value="5">Замена матрицы - 3000₽</option>
+                            <option value="6">Ремонт материнской платы - 2500₽</option>
+                            <option value="7">Замена аккумулятора - 1200₽</option>
+                            <option value="8">Установка SSD - 2000₽</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="preferred_date">Удобная дата</label>
+                        <input type="date" id="preferred_date" name="preferred_date">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="preferred_time">Удобное время</label>
+                        <select id="preferred_time" name="preferred_time">
+                            <option value="">Выберите время</option>
+                            <option value="09:00">09:00 - 10:00</option>
+                            <option value="10:00">10:00 - 11:00</option>
+                            <option value="11:00">11:00 - 12:00</option>
+                            <option value="12:00">12:00 - 13:00</option>
+                            <option value="13:00">13:00 - 14:00</option>
+                            <option value="14:00">14:00 - 15:00</option>
+                            <option value="15:00">15:00 - 16:00</option>
+                            <option value="16:00">16:00 - 17:00</option>
+                            <option value="17:00">17:00 - 18:00</option>
+                            <option value="18:00">18:00 - 19:00</option>
+                            <option value="19:00">19:00 - 20:00</option>
+                            <option value="20:00">20:00 - 21:00</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Адрес</label>
+                        <input type="text" id="address" name="address" placeholder="г. Красноярск, ул. Матросова 20">
+                    </div>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="issue_description">Описание проблемы *</label>
+                    <textarea id="issue_description" name="issue_description" rows="4" placeholder="Опишите подробно, что случилось с устройством..." required></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="#requests-section" class="btn-secondary cancel-btn">Отмена</a>
+                    <button type="submit" class="btn-primary">Отправить заявку</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
