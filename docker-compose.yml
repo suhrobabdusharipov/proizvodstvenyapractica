@@ -32,12 +32,6 @@ services:
       DB_NAME: remont24_db
       DB_USER: postgres
       DB_PASSWORD: postgres123
-    volumes:
-      - ./backend:/app/backend
-      - ./frontend:/app/frontend
-      - ./config.py:/app/backend/config.py
-    working_dir: /app/backend
-    command: python main.py
 
 volumes:
   postgres_data:
